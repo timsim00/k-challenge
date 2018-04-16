@@ -11,12 +11,24 @@ function store (state, emitter) {
       var s = state.elevator
       s.elevatorCount = data.elevatorCount
       s.floorCount = data.floorCount
-      s.list = []
+
+      //initialize elevators
+      s.elevators = []
       for (let i = 0; i < data.elevatorCount; i++) {
-        s.list.push({
+        s.elevators.push({
           name: `Elevator ${i}`,
           id: i,
-          tripCnt: 0
+          tripCnt: 0,
+          location: 1
+        })
+      }
+      //initialize floors
+      s.floors = []
+      for (let i = 0; i < data.floorCount; i++) {
+        s.floors.push({
+          name: `Floor ${i+1}`,
+          id: i+1,
+          location: 1
         })
       }
       emitter.emit('render')

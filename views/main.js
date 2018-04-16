@@ -15,6 +15,8 @@ function view (state, emit) {
           <h2>Initialize Elavator</h2>
           ${initElevators()}
 
+          ${showFloors()}
+
           <br>
         </section>
 
@@ -37,7 +39,7 @@ function view (state, emit) {
         cursor: not-allowed;
       }
     `
-    let isDisabled = state.elevator.list && state.elevator.list.length < 0
+    let isDisabled = state.elevator.elevators && state.elevator.elevators.length < 0
     let btnState = isDisabled ? 'button-disabled bg-gray' : 'bg-blue pointer'
     return html`
     <div class="measure pb3 ${disabledButton}">
@@ -63,15 +65,48 @@ function view (state, emit) {
     }
   }
 
+  function showFloors () {
+
+    function oneFloor(item) {
+      return html`
+      <div>
+        <button id="btnFloor${item.id}" data-id=${item.id} data-direction="UP" onclick=${onFloorService} class="avenir f5 link dim br2 ph3 pv2 mb2 dib ml3-ns">
+          ${item.name} -GO UP-
+        </button>
+        <button id="btnFloor${item.id}" data-id=${item.id} data-direction="DOWN" onclick=${onFloorService} class="avenir f5 link dim br2 ph3 pv2 mb2 dib ml3-ns">
+          ${item.name} -GO DOWN-
+        </button>
+      </div>
+      `
+    }
+
+    var items = state.elevator.floors || []
+    var nodes = items
+      .map((item) => {
+        return oneFloor(item)
+      })
+
+    return html`
+    <ul>
+      ${nodes}
+    </ul>
+    `
+
+    function onFloorService(e) {
+      let data = e.target.dataset
+      emit('elevator:floor-service', data)
+    }
+  }
+
   function showElevators () {
 
     function oneElevator(item) {
       return html`
-      <li>Elevator ${item.id}</li>
+      <li>${item.name}</li>
       `
     }
 
-    var items = state.elevator.list || []
+    var items = state.elevator.elevators || []
     var nodes = items
       .map((item) => {
         return oneElevator(item)
