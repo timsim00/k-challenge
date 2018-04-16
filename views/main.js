@@ -21,14 +21,7 @@ function view (state, emit) {
         <section class="fl mw6 w-50-m w-third-l pa3">
           <h2>Elevator Simulation</h2>
 
-          <p>
-
-          </p>
-
-          <ul>
-            <li>Elevator 1</li>
-            <li>Elevator 2</li>
-          </ul>
+          ${showElevators()}
 
           <br>
         </section>
@@ -64,8 +57,31 @@ function view (state, emit) {
     `
 
     function onStart () {
-      emit('elevator:start')
+      let elevatorCount = document.getElementById('elevatorCount').value
+      let floorCount = document.getElementById('floorCount').value
+      emit('elevator:start', {elevatorCount, floorCount})
     }
+  }
+
+  function showElevators () {
+
+    function oneElevator(item) {
+      return html`
+      <li>Elevator ${item.id}</li>
+      `
+    }
+
+    var items = state.elevator.list || []
+    var nodes = items
+      .map((item) => {
+        return oneElevator(item)
+      })
+
+    return html`
+    <ul>
+      ${nodes}
+    </ul>
+    `
   }
 
 
