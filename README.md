@@ -3,6 +3,7 @@
 
 App created using [create-choo-app](https://github.com/choojs/create-choo-app)
 
+![Screen shot](https://github.com/timsim00/k-challenge/blob/master/screenshot.png)
 
 
 
