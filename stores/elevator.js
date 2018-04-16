@@ -25,7 +25,7 @@ function store (state, emitter) {
           tripCnt: 0,
           location: 1,
           direction: 'none',
-          closest_floor: 1,
+          current_floor: 1,
           destination_floor: 1,
           occupied: false  //false if doors close and no destination floor is requested.
         })
@@ -52,15 +52,48 @@ function store (state, emitter) {
       exception is that if an unoccupied elevator is already stopped at that floor, then it will
       always have the highest priority answering that call.
       */
-      
+
+      let alreadyThere = floorHasElevator(data.id)
+      if (alreadyThere) {
+        //use alreadyThere.id for this service request
+      } else {
+        let approaching = approachingElevator(data)
+        if (approaching) {
+          //use approaching.id for this service request
+        } else {
+          let closest = findClosest(data.id)
+          //use closest.id for this service request
+        }
+      }
     })
 
     emitter.on('elevator:go', function (data) {
       /*
-      This logic will update elevators[i] state (direction, destination_floor, closest_floor, tripCnt)
+      This logic will update elevators[i] state (direction, destination_floor, current_floor, tripCnt)
       Displaying the current elevator state is trivial at this point.
       */
+
+      if (state.elevator.elevators[data.elevatorId].tripCnt > 100) {
+        emitter.emit('elevator:maintain', data.elevatorId)
+      }
     })
 
   })
+
+  function floorHasElevator (id) {
+    // map.filter through elevators:
+    // is there an elevator stopped at this floor? if so, return it, else return null.
+  }
+
+  function approachingElevator (data) {
+    // data = {id, direction}
+    // iterate through elevators:
+    // is there an approaching elevator? if so, return it, else return null.
+  }
+
+  function findClosest (id) {
+    // iterate through elevators:
+    // find the closest, unoccupied elevator.
+  }
+
 }

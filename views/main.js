@@ -143,7 +143,8 @@ function view (state, emit) {
 
     function onDest(e) {
       let dest = document.getElementById('floorDest').value
-      emit('elevator:go', dest)
+      elevatorId = 1 //need a way to determine which elevator answered the request.
+      emit('elevator:go', {dest, elevatorId})
     }
   }
 
