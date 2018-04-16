@@ -5,7 +5,7 @@ function store (state, emitter) {
 
   emitter.on('DOMContentLoaded', function () {
 
-    emitter.on('elevator:start', function (data) {
+    emitter.on('elevator:init', function (data) {
       //update some state
       console.log('start ENTER', data)
       var s = state.elevator
@@ -19,7 +19,10 @@ function store (state, emitter) {
           name: `Elevator ${i}`,
           id: i,
           tripCnt: 0,
-          location: 1
+          location: 1,
+          direction: 'none',
+          closest_floor: 1,
+          destination_floor: 1
         })
       }
       //initialize floors
@@ -28,10 +31,20 @@ function store (state, emitter) {
         s.floors.push({
           name: `Floor ${i+1}`,
           id: i+1,
-          location: 1
+          location: 1,
+          request_up: false,
+          request_down: false
         })
       }
       emitter.emit('render')
+    })
+
+    emitter.on('elevator:call', function (data) {
+
+    })
+
+    emitter.on('elevator:go', function (data) {
+
     })
 
   })

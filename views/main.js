@@ -15,7 +15,15 @@ function view (state, emit) {
           <h2>Initialize Elavator</h2>
           ${initElevators()}
 
-          ${showFloors()}
+          <p>
+            Call Elevator
+            ${showFloors()}
+          </p>
+
+          <p>
+            Set Destination Floor
+            ${goToFloor()}
+          </p>
 
           <br>
         </section>
@@ -52,7 +60,7 @@ function view (state, emit) {
         <input id="floorCount" type="number" value="1" min="1" class="ba b--black-20 pa2 mb2 db" />
       </p>
       <button id="btnStart" disabled=${isDisabled} onclick=${onStart} class="${btnState} avenir f5 link dim br2 ph3 pv2 mb2 dib white ml3-ns">
-        Start Elevators
+        Initalize Elevators
       </button>
 
     </div>
@@ -61,7 +69,7 @@ function view (state, emit) {
     function onStart () {
       let elevatorCount = document.getElementById('elevatorCount').value
       let floorCount = document.getElementById('floorCount').value
-      emit('elevator:start', {elevatorCount, floorCount})
+      emit('elevator:init', {elevatorCount, floorCount})
     }
   }
 
@@ -70,11 +78,11 @@ function view (state, emit) {
     function oneFloor(item) {
       return html`
       <div>
-        <button id="btnFloor${item.id}" data-id=${item.id} data-direction="UP" onclick=${onFloorService} class="avenir f5 link dim br2 ph3 pv2 mb2 dib ml3-ns">
-          ${item.name} -GO UP-
+        <button id="btnFloor${item.id}" data-id=${item.id} data-direction="UP" onclick=${onFloorCall} class="avenir f5 link dim br2 ph3 pv2 mb2 dib ml3-ns">
+          ${item.name} [UP]
         </button>
-        <button id="btnFloor${item.id}" data-id=${item.id} data-direction="DOWN" onclick=${onFloorService} class="avenir f5 link dim br2 ph3 pv2 mb2 dib ml3-ns">
-          ${item.name} -GO DOWN-
+        <button id="btnFloor${item.id}" data-id=${item.id} data-direction="DOWN" onclick=${onFloorCall} class="avenir f5 link dim br2 ph3 pv2 mb2 dib ml3-ns">
+          ${item.name} [DOWN]
         </button>
       </div>
       `
@@ -92,9 +100,9 @@ function view (state, emit) {
     </ul>
     `
 
-    function onFloorService(e) {
+    function onFloorCall(e) {
       let data = e.target.dataset
-      emit('elevator:floor-service', data)
+      emit('elevator:call', data)
     }
   }
 
@@ -117,6 +125,26 @@ function view (state, emit) {
       ${nodes}
     </ul>
     `
+  }
+
+  function goToFloor () {
+    return html`
+    <div class="measure pb3">
+      <p>
+        <label for="floorDest" class="f6 b db mb2">Destination Floor</label>
+        <input id="floorDest" type="number" value="1" min="1" class="ba b--black-20 pa2 mb2 db" />
+      </p>
+      <button id="btnDest" onclick=${onDest} class="bg-blue pointer avenir f5 link dim br2 ph3 pv2 mb2 dib white ml3-ns">
+        Go
+      </button>
+
+    </div>
+    `
+
+    function onDest(e) {
+      let data = e.target.dataset
+      emit('elevator:go', data)
+    }
   }
 
 
