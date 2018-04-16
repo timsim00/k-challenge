@@ -142,8 +142,8 @@ function view (state, emit) {
     `
 
     function onDest(e) {
-      let data = e.target.dataset
-      emit('elevator:go', data)
+      let dest = document.getElementById('floorDest').value
+      emit('elevator:go', dest)
     }
   }
 

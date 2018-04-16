@@ -1,7 +1,11 @@
 module.exports = store
 
 function store (state, emitter) {
-  state.elevator = {list: []}
+  state.elevator = {
+    elevators: [],
+    floors: [],
+    requests: []
+  }
 
   emitter.on('DOMContentLoaded', function () {
 
@@ -22,7 +26,8 @@ function store (state, emitter) {
           location: 1,
           direction: 'none',
           closest_floor: 1,
-          destination_floor: 1
+          destination_floor: 1,
+          occupied: false  //false if doors close and no destination floor is requested.
         })
       }
       //initialize floors
@@ -40,11 +45,21 @@ function store (state, emitter) {
     })
 
     emitter.on('elevator:call', function (data) {
-
+      /*
+      This logic needs to implement #7, to send the correct elevator:
+      When an elevator request is made, the unoccupied elevator closest to it will answer the
+      call, unless an occupied elevator is moving and will pass that floor on its way. The
+      exception is that if an unoccupied elevator is already stopped at that floor, then it will
+      always have the highest priority answering that call.
+      */
+      
     })
 
     emitter.on('elevator:go', function (data) {
-
+      /*
+      This logic will update elevators[i] state (direction, destination_floor, closest_floor, tripCnt)
+      Displaying the current elevator state is trivial at this point.
+      */
     })
 
   })
